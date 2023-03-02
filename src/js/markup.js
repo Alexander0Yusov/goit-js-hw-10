@@ -5,13 +5,13 @@ export function firstWay(country) {
   const markup = `<div>
   
   <div class='container'>  
-  <img href=${flags.svg} alt='flag image'/> 
+  <img src=${flags.svg} alt='flag image'/>
   <p class='name'>${name.official}</p>
-  </div>
+  </div> 
 
-  <p class='capital'>Capital: ${capital}</p>
-  <p class='population'>Population: ${population}</p>
-  <p class='population'>Languages: ${langs}</p>
+  <p class='capital'><span>Capital:</span> ${capital}</p>
+  <p class='population'><span>Population:</span> ${population}</p>
+  <p class='population'><span>Languages:</span> ${langs}</p>
   
   </div>`;
 

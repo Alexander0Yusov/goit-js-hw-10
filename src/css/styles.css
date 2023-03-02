@@ -21,9 +21,23 @@ body {
 
 .container {
   display: flex;
+  align-items: baseline;
+}
+
+.name {
+  display: block;
+  margin: 0;
+  padding: 0;
+  margin-left: 10px;
+  font-size: 30px;
+  font-weight: 700;
 }
 
 img {
-  height: 50px;
+  height: 30px;
   width: 50px;
+}
+
+span {
+  font-weight: 700;
 }

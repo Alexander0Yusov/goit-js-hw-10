@@ -3,6 +3,10 @@ import apiService from './js/apiService';
 import { firstWay, secondWay } from './js/markup';
 //import singleCountry from './templates/singleCountry.hbs';
 
+var img = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+
+img.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'move.png');
+
 const rfs = {
   inputEl: document.querySelector('#search-box'),
   singleCountryEl: document.querySelector('.country-info'),
