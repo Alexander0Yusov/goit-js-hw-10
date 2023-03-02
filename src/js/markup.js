@@ -19,5 +19,18 @@ export function firstWay(country) {
 }
 
 export function secondWay(countryAr) {
-  return countryAr;
+  const markup = countryAr
+    .map(({ name, flags }) => {
+      return `<li>
+      <img src=${flags.svg} alt='flag image' />
+      <p class='name'>${name.official}</p>
+    </li>`;
+    })
+    .join('');
+
+  return markup;
+}
+
+export function clearEl(el) {
+  el.innerHTML = '';
 }

@@ -1,39 +1,60 @@
 import './css/styles.css';
-import apiService from './js/apiService';
-import { firstWay, secondWay } from './js/markup';
-//import singleCountry from './templates/singleCountry.hbs';
+import Notiflix from 'notiflix';
+const debounce = require('lodash.debounce');
+import apiService from './js/fetchCountries';
+import { firstWay, secondWay, clearEl } from './js/markup';
 
-var img = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-
-img.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'move.png');
+const api = new apiService();
+const DEBOUNCE_DELAY = 300;
 
 const rfs = {
   inputEl: document.querySelector('#search-box'),
   singleCountryEl: document.querySelector('.country-info'),
+  multiCountryEl: document.querySelector('.country-list'),
 };
 
-rfs.inputEl.addEventListener('input', onInput);
-
-const DEBOUNCE_DELAY = 300;
-const api = new apiService();
+rfs.inputEl.addEventListener('input', debounce(onInput, DEBOUNCE_DELAY));
 
 function onInput(e) {
   e.preventDefault;
 
-  const inputValue = e.target.value;
+  const inputValue = e.target.value.trim(' ');
 
-  api
-    .getData(inputValue)
-    .then(ar => {
-      if (ar.length === 1) {
-        rfs.singleCountryEl.innerHTML = firstWay(ar[0]);
-        console.log(firstWay(ar[0]));
-      } else {
-        secondWay(ar);
-      }
+  // особый синтаксис типа if...
+  inputValue === '' && clearEl(rfs.singleCountryEl);
+  inputValue === '' && clearEl(rfs.multiCountryEl);
 
-      return ar;
-    })
-    .then(data => console.log(data))
-    .catch(e => e.message);
+  inputValue !== '' &&
+    api
+      .fetchCountries(inputValue)
+      .then(ar => {
+        if (ar.length === 1) {
+          rfs.singleCountryEl.innerHTML = firstWay(ar[0]);
+          clearEl(rfs.multiCountryEl);
+        } else if (ar.length > 1 && ar.length <= 10) {
+          rfs.multiCountryEl.innerHTML = secondWay(ar);
+          clearEl(rfs.singleCountryEl);
+        } else if (ar.length > 10) {
+          Notiflix.Notify.info(
+            'Too many matches found. Please enter a more specific name.'
+          );
+
+          clearEl(rfs.singleCountryEl);
+          clearEl(rfs.multiCountryEl);
+        }
+
+        return ar;
+      })
+      .then(data => {
+        console.log(data);
+        if (data.message) {
+          Notiflix.Notify.failure('Oops, there is no country with that name');
+          clearEl(rfs.singleCountryEl);
+          clearEl(rfs.multiCountryEl);
+        }
+      })
+      .catch(e => {
+        console.log(e.message);
+      })
+      .finally(() => {});
 }

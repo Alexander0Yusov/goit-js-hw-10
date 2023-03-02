@@ -1,9 +1,7 @@
 export default class ApiService {
-  constructor() {
-    this.URL = 'https://restcountries.com/v3.1/name/';
-  }
+  constructor() {}
 
-  getData(name) {
+  fetchCountries(name) {
     const queryString = `https://restcountries.com/v3.1/name/${name}?fields=name,capital,population,flags,languages`;
     return fetch(queryString).then(r => r.json());
   }
